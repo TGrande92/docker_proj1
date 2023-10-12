@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h2>Welcome to the Dashboard</h2>
+    <p>Data from MongoDB will be shown below:</p>
+    <div id="data"></div>
+    <table>
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Average Score</th>
+            </tr>
+        </thead>
+        <tbody id="dataTable">
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('/data', {
+                    headers: {
+                        'username': 'admin',
+                        'password': 'password'
+                    }
+                });
+
+                if (response.status !== 200) {
+                    throw new Error("Failed to fetch data");
+                }
+
+                const data = await response.json();
+
+                const uniqueClasses = Array.from(new Set(data.map(item => item.course))).map(course => {
+                    return {
+                        course: course,
+                        average_grade: data.find(item => item.course === course).average_grade
+                    };
+                });
+
+                const dataTable = document.getElementById('dataTable');
+
+                dataTable.innerHTML = uniqueClasses.map(item => `
+                    <tr>
+                        <td>${item.course}</td>
+                        <td>${item.average_grade}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+                alert('Error fetching data. Please try again later.');
+            }
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>

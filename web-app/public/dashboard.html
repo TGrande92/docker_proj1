@@ -1,23 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-    <h2>Welcome to the Dashboard</h2>
-    <p>Data from MySQL will be shown below:</p>
-    <div id="data"></div>
-
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+    </head>
+    
+    <body>
+        <h2>Welcome to the Dashboard</h2>
+        <p>Data from MySQL will be shown below:</p>
+        <div id="data"></div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Course</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable"></tbody> <!-- This is the tbody element we're referencing in the script -->
+        </table>
+        <h3>Enter Data</h3>
+        <form id="dataEntryForm">
+        <label for="studentName">Student Name:</label>
+        <input type="text" id="studentName" name="studentName" required>
+        
+        <label for="studentID">Student ID:</label>
+        <input type="text" id="studentID" name="studentID" required>
+    
+        <label for="course">Course:</label>
+        <input type="text" id="course" name="course" required>
+    
+        <label for="grade">Grade:</label>
+        <input type="number" id="grade" name="grade" required>
+    
+        <button type="submit">Submit</button>
+    </form>
+    
+    <div id="dataResponse"></div>
+    
     <script>
-        async function fetchData() {
+    async function fetchData() {
+        try {
             const response = await fetch('/data');
             const data = await response.json();
-            document.getElementById('data').textContent = JSON.stringify(data);
+            const dataTable = document.getElementById('dataTable');
+            dataTable.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.student_name}</td>
+                    <td>${item.student_id}</td>
+                    <td>${item.course}</td>
+                    <td>${item.grade}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error("Failed to fetch data:", error);
         }
-        
-        fetchData();
+    }
+
+    fetchData();
+
+    const dataEntryForm = document.getElementById('dataEntryForm');
+    dataEntryForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(dataEntryForm);
+        const data = {
+            studentName: formData.get('studentName'),
+            studentID: formData.get('studentID'),
+            course: formData.get('course'),
+            grade: parseFloat(formData.get('grade'))
+        };
+
+        const response = await fetch('/submit-grade', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        document.getElementById('dataResponse').textContent = result.message;
+    });
     </script>
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
