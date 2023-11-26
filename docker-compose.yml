@@ -2,7 +2,8 @@ version: '3'
 
 services:
   db:
-    image: mysql:latest # Using the official image directly without a custom Dockerfilen
+    build: ./database
+    image: tgrande/mysql:latest # Using the official image directly without a custom Dockerfilen
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: student_grades
@@ -19,6 +20,7 @@ services:
 
   web-app:
     build: ./web-app
+    image: tgrande/web-app:latest
     ports:
       - "5000:5000"
     environment:
@@ -34,6 +36,7 @@ services:
 
   auth-service:
     build: ./auth-service
+    image: tgrande/auth-service:latest
     ports:
       - "5001:5001"
     networks:
@@ -52,6 +55,7 @@ services:
 
   data-transfer:
     build: ./data-transfer
+    image: tgrande/data-transfer:latest
     networks:
       - app-network
     depends_on:
@@ -62,6 +66,7 @@ services:
 
   data-display:
     build: ./data-display
+    image: tgrande/data-display:latest
     ports:
       - "5002:5002"
     networks:
