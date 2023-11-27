@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: unified-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+    - name: web-app
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+    - name: data-display
+      protocol: TCP
+      port: 5002
+      targetPort: 5002
+  selector:
+    service-group: web-group
