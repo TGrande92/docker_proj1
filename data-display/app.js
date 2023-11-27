@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const PORT = 5002;
 
-const mongoURI = "mongodb://mongo:27017/analytics_db";
+const mongoURI = "mongodb://mongo-service:27017/analytics_db";
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));

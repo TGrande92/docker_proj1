@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: data-display-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: data-display
@@ -16,7 +16,7 @@ spec:
       - name: data-display
         image: tgrande/data-display:latest
         ports:
-        - containerPort: 80
+        - containerPort: 5002
 
 ---
 apiVersion: v1
@@ -28,6 +28,6 @@ spec:
   selector:
     app: data-display
   ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30001
+  - port: 5002
+    targetPort: 5002
+    nodePort: 30002

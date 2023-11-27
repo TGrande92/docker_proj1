@@ -43,7 +43,8 @@ services:
       - app-network
 
   mongo:
-    image: mongo:latest
+    build: ./mongodb
+    image: tgrande/mongo:latest
     networks:
       - app-network
     ports:

@@ -1,7 +1,7 @@
 FROM mysql:latest
 
 ENV MYSQL_ROOT_PASSWORD=password1
-ENV MYSQL_DATABASE=students_grades
+ENV MYSQL_DATABASE=student_grades
 ENV MYSQL_USER=user1
 ENV MYSQL_PASSWORD=password1
 ADD init.sql /docker-entrypoint-initdb.d/
