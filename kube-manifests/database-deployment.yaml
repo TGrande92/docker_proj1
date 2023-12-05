@@ -23,7 +23,7 @@ spec:
       volumes:
       - name: initdb
         configMap:
-          name: mysql-initdb-config
+          name: my-configmap
 
 
 ---
